@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QLNH_APIs.Data;
 
 namespace QLNH_APIs.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210719002828_AdjustModels")]
+    partial class AdjustModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -93,9 +95,6 @@ namespace QLNH_APIs.Migrations
                     b.Property<int?>("GuestId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("LocationId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .HasColumnType("longtext");
 
@@ -108,8 +107,6 @@ namespace QLNH_APIs.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("GuestId");
-
-                    b.HasIndex("LocationId");
 
                     b.HasIndex("StatusId");
 
@@ -193,32 +190,6 @@ namespace QLNH_APIs.Migrations
                     b.HasIndex("ItemId");
 
                     b.ToTable("ItemImage");
-                });
-
-            modelBuilder.Entity("QLNH_APIs.Models.Location", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime");
-
-                    b.Property<bool>("Deleted")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime>("Updated")
-                        .HasColumnType("datetime");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Location");
                 });
 
             modelBuilder.Entity("QLNH_APIs.Models.Order", b =>
@@ -450,17 +421,11 @@ namespace QLNH_APIs.Migrations
                         .WithMany()
                         .HasForeignKey("GuestId");
 
-                    b.HasOne("QLNH_APIs.Models.Location", "Location")
-                        .WithMany()
-                        .HasForeignKey("LocationId");
-
                     b.HasOne("QLNH_APIs.Models.Status", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId");
 
                     b.Navigation("Guest");
-
-                    b.Navigation("Location");
 
                     b.Navigation("Status");
                 });

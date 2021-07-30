@@ -10,18 +10,18 @@ namespace QLNH_APIs.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class CategoryController : ControllerBase
+    public class UnitTypeController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        public CategoryController(ApplicationDbContext context)
+        public UnitTypeController(ApplicationDbContext context)
         {
             _context = context;
         }
 
         [HttpGet]
-        public IEnumerable<Category> Get()
+        public IEnumerable<UnitType> Get()
         {
-            return _context.Category.ToList();
+            return _context.UnitType.ToList();
         }
     }
 }
