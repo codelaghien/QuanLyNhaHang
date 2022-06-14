@@ -1,27 +1,46 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using QLNH_APIs.Data;
-using QLNH_APIs.Models;
+using Microsoft.EntityFrameworkCore;
+using QuanLyThucPham.Data;
+using QuanLyThucPham.DTO;
+using QuanLyThucPham.Models;
 
-namespace QLNH_APIs.Controllers
+namespace QuanLyThucPham.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class UnitController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        public UnitController(ApplicationDbContext context)
+        private readonly IMapper _mapper;
+        public UnitController(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public IEnumerable<Unit> Get()
+        public async Task<ActionResult<IEnumerable<UnitDTO>>> Get()
         {
-            return _context.Unit.ToList();
+            try
+            {
+                var data = await _context.Units
+                        .AsNoTracking()
+                        .Where(u => !u.Deleted)
+                        .ToArrayAsync();
+                var model = _mapper.Map<IEnumerable<UnitDTO>>(data);
+                return new JsonResult(model);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest("not good");
+            }
         }
     }
 }
